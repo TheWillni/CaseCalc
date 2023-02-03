@@ -5,7 +5,7 @@ public class UrlConnectionReader
 {
     public static String grabFromUrl(String url) {
         url = "https://steamcommunity.com/market/listings/730/Fracture%20Case";
-        url = "https://steamcommunity.com/market/listings/730/Operation%20Bravo%20Case";
+        //url = "https://steamcommunity.com/market/listings/730/Operation%20Bravo%20Case";
         String output  = getUrlContents(url);
         // @TODO remove these magic numbers and add as a constant
         int start = output.indexOf("var line1=") + 10;

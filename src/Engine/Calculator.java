@@ -36,14 +36,7 @@ public class Calculator {
         double totalSum = 0.0;
         utils.print("Attempting to calculate total inventory value...");
 
-        // reading keyset into an array
-        Set<Object> casesSet = inventory.getKeySet();
-        String[] casesNames = new String[casesSet.size()];
-        int i = 0;
-        for (Object caseName : casesSet) {
-            casesNames[i++] = String.valueOf(caseName);
-        }
-
+        String[] casesNames = getCaseNames();
         // reading from array
         for (String caseName : casesNames) {
             double caseValue = sumCaseValue(caseName);
@@ -54,5 +47,17 @@ public class Calculator {
 
         }
         return totalSum;
+    }
+
+    public static String[] getCaseNames() {
+
+        // reading keyset into an array
+        Set<Object> casesSet = inventory.getKeySet();
+        String[] casesNames = new String[casesSet.size()];
+        int i = 0;
+        for (Object caseName : casesSet) {
+            casesNames[i++] = String.valueOf(caseName);
+        }
+        return casesNames;
     }
 }

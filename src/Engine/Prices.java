@@ -1,5 +1,6 @@
 import java.util.Date;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Prices {
@@ -22,7 +23,7 @@ public class Prices {
         setPrice("BROKEN FANG", 3.02);
 
 
-        fetch();
+        //fetch();
     }
     public void setPrice(String caseName, double price) {
         prop.setProperty(caseName, doubleToString(price));
@@ -51,17 +52,32 @@ public class Prices {
         return true;
     }
 
-    public static void fetch() {
-        //@TODO implement website grabber
-        String massData = WebGrabber.grabFromUrl("");
+    public static void fetch(String[] caseNames) {
+        int caseNumber = 0;
+
         Date date = new Date();
         //@ TODO implement a way for user to choose which date to calculate their inventory on
         date.getTime();
-        utils.print(date);
+        //utils.print(date);
         String tempDateString = date.toString();
         String dateString = tempDateString.substring(4,10) + tempDateString.substring(tempDateString.length() -5);
-        utils.print(dateString);
-        int infoLocation =massData.lastIndexOf(dateString);
+
+        for (caseNumber=0;caseNumber<caseNames.length;caseNumber++) {
+            // iterate through for each case that our user holds at least one of
+            double price = getCasePriceOnDate(caseNames[caseNumber], dateString);
+            utils.print("Price found for " + caseNames[caseNumber].toString().toLowerCase() +" case: $" + price);
+        }
+
+
+    }
+
+    private static double getCasePriceOnDate(String caseName, String date) {
+        String url = CaseURL.valueOf(caseName).getURL();
+        utils.print("URL was found to be: " + url);
+        String massData = WebGrabber.grabFromUrl(url);
+
+        utils.print(date);
+        int infoLocation =massData.lastIndexOf(date);
         massData = massData.substring(infoLocation);
         utils.print(infoLocation);
         int start = -1;
@@ -69,8 +85,9 @@ public class Prices {
         int i=0;
         // we have now isolated a string in this format --> ["Feb 03 2023 03: +0",46.269,"9"]
         // but now we need to only grab the double thats surround by the 2 ","'s
+        double casePrice = -1.0;
         for (i=0;i<CONSTANTS.MAXIMUM_STEAM_DATA_RANGE; i++) {
-            utils.print("Char at [" + i + "]: " + massData.charAt(i));
+            //utils.print("Char at [" + i + "]: " + massData.charAt(i));
             if (massData.charAt(i) == ',') {
                 // this is the index of the first comma
                 if (start == -1) {
@@ -89,10 +106,10 @@ public class Prices {
             utils.print("\n\n\n\nITS FUCKED LOL\n\n\n\n\n");
         }
         else {
-            double casePrice = Double.valueOf(massData.substring(start + 1, end));
-            utils.print("CasePrice was found to be: $" + casePrice);
+            casePrice = Double.valueOf(massData.substring(start + 1, end));
+            //utils.print("CasePrice was found to be: $" + casePrice);
 
         }
-
+        return casePrice;
     }
 }
