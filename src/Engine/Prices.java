@@ -30,7 +30,6 @@ public class Prices {
     }
 
     public double getPrice(String caseName) {
-        // @TODO add a try/catch to filter cases that we have no information on
         try {
             String priceString = prop.getProperty(caseName);
             return Double.valueOf(priceString);
@@ -61,12 +60,19 @@ public class Prices {
         //utils.print(date);
         String tempDateString = date.toString();
         String dateString = tempDateString.substring(4,10) + tempDateString.substring(tempDateString.length() -5);
+        dateString = "Jan 15 2017";
 
         for (caseNumber=0;caseNumber<caseNames.length;caseNumber++) {
             // iterate through for each case that our user holds at least one of
             double price = getCasePriceOnDate(caseNames[caseNumber], dateString);
-            setPrice(caseNames[caseNumber], price);
-            utils.print("Price found for " + caseNames[caseNumber].toString().toLowerCase() +" case: $" + price);
+            if (ErrorHandler.validateError(price)) {
+                setPrice(caseNames[caseNumber], price);
+                utils.print("Price found for " + caseNames[caseNumber].toString().toLowerCase() +" case: $" + price);
+            }
+            else {
+                setPrice(caseNames[caseNumber], CONSTANTS.PRICE_ERROR);
+            }
+
         }
 
 
@@ -79,10 +85,15 @@ public class Prices {
 
         utils.print(date);
         int infoLocation =massData.lastIndexOf(date);
+
+        // @TODO make this check more sophisticated
+        if (infoLocation == CONSTANTS.NOT_FOUND) {
+            return CONSTANTS.PRICE_ERROR;
+        }
         massData = massData.substring(infoLocation);
         utils.print(infoLocation);
-        int start = -1;
-        int end = -1;
+        int start = CONSTANTS.NOT_FOUND;
+        int end = CONSTANTS.NOT_FOUND;
         int i=0;
         // we have now isolated a string in this format --> ["Feb 03 2023 03: +0",46.269,"9"]
         // but now we need to only grab the double thats surround by the 2 ","'s
@@ -91,7 +102,7 @@ public class Prices {
             //utils.print("Char at [" + i + "]: " + massData.charAt(i));
             if (massData.charAt(i) == ',') {
                 // this is the index of the first comma
-                if (start == -1) {
+                if (start == CONSTANTS.NOT_FOUND) {
                     start = i;
                 }
                 else {
@@ -105,11 +116,11 @@ public class Prices {
         // Validate that we did infact find both start and end comma's
         if (start == -1 || end == -1) {
             utils.print("\n\n\n\nITS FUCKED LOL\n\n\n\n\n");
+            casePrice = CONSTANTS.PRICE_ERROR;
         }
         else {
             casePrice = Double.valueOf(massData.substring(start + 1, end));
             //utils.print("CasePrice was found to be: $" + casePrice);
-
         }
         return casePrice;
     }

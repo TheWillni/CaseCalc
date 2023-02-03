@@ -4,4 +4,5 @@ public class Constants {
 
     Double QUANTITY_ERROR = -69.00;
     int MAXIMUM_STEAM_DATA_RANGE = 35;
+    int NOT_FOUND = -1;
 }

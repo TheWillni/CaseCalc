@@ -46,6 +46,8 @@ public class Calculator {
             };
 
         }
+        // @TODO remove this
+        utils.print(Config.DEFAULT_DATE);
         return totalSum;
     }
 

@@ -3,6 +3,7 @@ import java.util.Set;
 public class Driver {
     public static Prices prices = new Prices();
     public static Inventory inventory = new Inventory();
+    private static PropertiesLoader propertiesLoader = new PropertiesLoader();
     public static Calculator calc = new Calculator(prices, inventory);
     //public static MyUtils utils = new MyUtils();
     public static void main(String[] args) {
@@ -20,7 +21,6 @@ public class Driver {
         // give them a UI to update their amounts too
 
         calc.sumInventoryValue();
-
 
 
         // @TODO Provide a detailed breakdown in a .txt file
