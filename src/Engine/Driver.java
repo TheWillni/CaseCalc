@@ -1,16 +1,18 @@
+import java.util.Set;
+
 public class Driver {
+    public static Prices prices = new Prices();
+    public static Inventory inventory = new Inventory();
+    public static Calculator calc = new Calculator(prices, inventory);
     public static MyUtils utils = new MyUtils();
     public static void main(String[] args) {
         // @TODO Grab recent price list
         // The idea is to use the price list from previous time program was run.
-        Prices prices = new Prices();
+
 
         // tests
-        double priceTest = prices.getPrice("PHOENIX");
-        String caseName = "PHOENIX";
-        int id = CaseID.valueOf(caseName).getId();
-        utils.print("ID is: " + id);
-        utils.print(priceTest);
+        utils.print(prices.getPrice("PHOENIX"));
+
 
 
         // @TODO Update price list
@@ -21,10 +23,22 @@ public class Driver {
         // @TODO Load users case list
         // give them a UI to update their amounts too
 
+
+        // tests
+        utils.print(inventory.getQuantity("PHOENIX"));
+
+        // @TODO Calculate total inventory sum for a specific case
+        utils.print(calc.sumCaseValue("PHOENIX"));
+
         // @TODO Calculate total inventory value
+
+        calc.sumInventoryValue();
+
+
 
         // @TODO Provide a detailed breakdown in a .txt file
         //print("hello");
     }
+
 
 }
