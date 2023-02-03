@@ -14,20 +14,21 @@ public class Calculator {
     }
     public static double sumCaseValue(String caseName){
 
-        // get and validate the price
-        double price = prices.getPrice(caseName);
-        if (!prices.isValid(price)){
-            return CONSTANTS.PRICE_ERROR;
-        }
-
         // get and validate quantity
         int quantity = inventory.getQuantity(caseName);
         if (!inventory.isValid(quantity)) {
             return CONSTANTS.QUANTITY_ERROR;
         }
 
+        // get and validate the price
+        double price = prices.getPrice(caseName);
+        if (!prices.isValid(price)){
+            return CONSTANTS.PRICE_ERROR;
+        }
+
         // calculate total value for this particular case.
         double value = price*quantity;
+        utils.print("Total value for " + caseName +" was $" + value);
         return value;
     }
 
@@ -45,13 +46,13 @@ public class Calculator {
 
         // reading from array
         for (String caseName : casesNames) {
-            double value = sumCaseValue(caseName);
-            if (errorHandler.validateError(value)) {
-                totalSum += value;
-                utils.print("");
+            double caseValue = sumCaseValue(caseName);
+            if (errorHandler.validateError(caseValue)) {
+                totalSum += caseValue;
+                utils.print("Inventory value is now $" + totalSum);
             };
 
         }
-        return 0.0;
+        return totalSum;
     }
 }

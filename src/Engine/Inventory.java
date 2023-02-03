@@ -16,7 +16,6 @@ public class Inventory {
         setQuantity("BREAKOUT", 3);
         setQuantity("BROKEN FANG", 15);
 
-
     }
     public void setQuantity(String caseName, int quantity) {
         prop.setProperty(caseName, intToString(quantity));
