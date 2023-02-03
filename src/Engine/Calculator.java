@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.Set;
 
 public class Calculator {
@@ -28,14 +29,13 @@ public class Calculator {
 
         // calculate total value for this particular case.
         double value = price*quantity;
-        utils.print("Total value for " + caseName +" was $" + value);
+        utils.print("Total value for " + caseName +" was $" + utils.toTwoDeci(value));
         return value;
     }
 
     public static double sumInventoryValue() {
         double totalSum = 0.0;
         utils.print("Attempting to calculate total inventory value...");
-
         String[] casesNames = getCaseNames();
         // reading from array
         for (String caseName : casesNames) {
@@ -43,7 +43,7 @@ public class Calculator {
             if (errorHandler.validateError(caseValue)) {
                 totalSum += caseValue;
                 //@todo currency converter
-                utils.print("Inventory value is now $" + totalSum);
+                utils.print("Inventory value is now $" + utils.toTwoDeci(totalSum));
             };
 
         }
@@ -63,4 +63,6 @@ public class Calculator {
         }
         return casesNames;
     }
+
+
 }
