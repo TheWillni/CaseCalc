@@ -10,11 +10,11 @@ public class Inventory {
         // @TODO remove these manual quantities. Implement loading and saving.
         setQuantity("PHOENIX", 46);
         setQuantity("FRACTURE", 3299);
-        setQuantity("CHROMA 3", 340);
+        setQuantity("CHROMA_3", 340);
         setQuantity("BRAVO", 1);
-        setQuantity("DREAMS AND NIGHTMARES", -1);
+        setQuantity("DREAMS_NIGHTMARES", -1);
         setQuantity("BREAKOUT", 3);
-        setQuantity("BROKEN FANG", 15);
+        setQuantity("BROKEN_FANG", 15);
 
     }
     public void setQuantity(String caseName, int quantity) {

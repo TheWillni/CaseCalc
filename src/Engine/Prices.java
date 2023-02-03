@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Prices {
-    Properties prop = new Properties();
+    public static Properties prop = new Properties();
     public static Constants CONSTANTS = new Constants();
 
     public static MyUtils utils = new MyUtils();
@@ -25,7 +25,7 @@ public class Prices {
 
         //fetch();
     }
-    public void setPrice(String caseName, double price) {
+    public static void setPrice(String caseName, double price) {
         prop.setProperty(caseName, doubleToString(price));
     }
 
@@ -41,7 +41,7 @@ public class Prices {
         }
 
     }
-    private String doubleToString( double price) {
+    private static String doubleToString( double price) {
         return String.valueOf(price);
     }
     public boolean isValid(double price){
@@ -65,6 +65,7 @@ public class Prices {
         for (caseNumber=0;caseNumber<caseNames.length;caseNumber++) {
             // iterate through for each case that our user holds at least one of
             double price = getCasePriceOnDate(caseNames[caseNumber], dateString);
+            setPrice(caseNames[caseNumber], price);
             utils.print("Price found for " + caseNames[caseNumber].toString().toLowerCase() +" case: $" + price);
         }
 

@@ -4,15 +4,15 @@ import java.io.*;
 public class UrlConnectionReader
 {
     public static String grabFromUrl(String url) {
-        url = "https://steamcommunity.com/market/listings/730/Fracture%20Case";
-        //url = "https://steamcommunity.com/market/listings/730/Operation%20Bravo%20Case";
+        //url = "https://steamcommunity.com/market/listings/730/Fracture%20Case";
+        //url = "https://steamcommunity.com/market/listings/730/Dreams%20%26%20Nightmares";
         String output  = getUrlContents(url);
         // @TODO remove these magic numbers and add as a constant
         int start = output.indexOf("var line1=") + 10;
         int end = output.indexOf("if ( line1 != false )") - 48;
         //System.out.println(output);
         String priceHistory = output.substring(start,end);
-        System.out.println(priceHistory);
+        //System.out.println(priceHistory);
         return output;
     }
 
