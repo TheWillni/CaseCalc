@@ -3,4 +3,5 @@ public class Constants {
     Double PRICE_ERROR = -1.337;
 
     Double QUANTITY_ERROR = -69.00;
+    int MAXIMUM_STEAM_DATA_RANGE = 26;
 }
