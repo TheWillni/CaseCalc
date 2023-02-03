@@ -1,12 +1,16 @@
 public class Driver {
-    //public Constants c = new Constants;
+    public static MyUtils utils = new MyUtils();
     public static void main(String[] args) {
         // @TODO Grab recent price list
         // The idea is to use the price list from previous time program was run.
         Prices prices = new Prices();
-        String caseName = "BREAKOUT";
+
+        // tests
+        double priceTest = prices.getPrice("PHOENIX");
+        String caseName = "PHOENIX";
         int id = CaseID.valueOf(caseName).getId();
-        System.out.println("ID is: " + id + "\n");
+        utils.print("ID is: " + id);
+        utils.print(priceTest);
 
 
         // @TODO Update price list
@@ -20,6 +24,7 @@ public class Driver {
         // @TODO Calculate total inventory value
 
         // @TODO Provide a detailed breakdown in a .txt file
+        //print("hello");
     }
 
 }
