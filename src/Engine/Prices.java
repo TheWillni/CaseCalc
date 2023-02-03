@@ -53,14 +53,11 @@ public class Prices {
 
     public static void fetch(String[] caseNames) {
         int caseNumber = 0;
+        String dateString = DateHandler.format(Config.DEFAULT_DATE);
 
-        Date date = new Date();
         //@ TODO implement a way for user to choose which date to calculate their inventory on
-        date.getTime();
-        //utils.print(date);
-        String tempDateString = date.toString();
-        String dateString = tempDateString.substring(4,10) + tempDateString.substring(tempDateString.length() -5);
-        dateString = "Jan 15 2017";
+
+        //dateString = "Jan 15 2017";
 
         for (caseNumber=0;caseNumber<caseNames.length;caseNumber++) {
             // iterate through for each case that our user holds at least one of

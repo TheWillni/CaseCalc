@@ -42,6 +42,7 @@ public class Calculator {
             double caseValue = sumCaseValue(caseName);
             if (errorHandler.validateError(caseValue)) {
                 totalSum += caseValue;
+                //@todo currency converter
                 utils.print("Inventory value is now $" + totalSum);
             };
 
