@@ -13,4 +13,8 @@ public class MyUtils {
             System.out.println();
         }
     }
+
+    public static String toTwoDeci(double number) {
+        return String.format("%.2f", number);
+    }
 }
