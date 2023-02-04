@@ -22,7 +22,7 @@ public class Calculator {
         }
 
         // get and validate the price
-        double price = prices.getPrice(caseName);
+        double price = prices.getPrice(caseName, Config.DEFAULT_DATE);
         if (!prices.isValid(price)){
             return CONSTANTS.PRICE_ERROR;
         }
@@ -48,7 +48,7 @@ public class Calculator {
 
         }
         // @TODO remove this
-        utils.print(Config.DEFAULT_DATE);
+        //utils.print(Config.DEFAULT_DATE);
         return totalSum;
     }
 

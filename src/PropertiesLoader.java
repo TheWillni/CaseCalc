@@ -14,7 +14,10 @@ public class PropertiesLoader {
     }
     public static void setProperties(String propertiesFile) {
         final Properties properties = loadPropertiesFile(propertiesFile);
-        Config.DEFAULT_DATE = safeGetString(properties, "defaultDate", "today");
+        // default date
+        Date def = new Date();
+        def.getTime();
+        Config.DEFAULT_DATE = safeGetDate(properties, "defaultDate", def);
     }
 
 
@@ -49,43 +52,44 @@ public class PropertiesLoader {
         }
     }
 
-    private static String safeGetString(Properties properties, String key, String def) {
+    private static Date safeGetDate(Properties properties, String key, Date def) {
         if(properties == null) {
             return def;
         }
         String val = properties.getProperty(key);
         try {
-
-            if(val != null && isValidDateFormat(val)) {
-                return val;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            if(val != null) {
+                Date newDate = sdf.parse(val);
+                return newDate;
             } else return def;
-        } catch(NumberFormatException e) {
-            System.err.println("Error deserializing: " + val);
+        } catch(ParseException e) {
+            System.err.println("Error parsing date from properties: " + val);
             return def;
         }
     }
-    private static boolean isValidDateFormat(String val) {
-
-        //utils.print(day + "/" + month+ "/" + year);
-        try {
-            String day = val.substring(4,6);
-            String year = val.substring(7,11);
-            String month = getMonthNumber(val.substring(0,3));
-            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            formatter.setLenient(false);
-            Date date = formatter.parse(day + "/" + month+ "/" + year);
-            return true;
-        }
-//        catch (ParseException e) {
+//    private static boolean isValidDateFormat(String val) {
+//
+//        //utils.print(day + "/" + month+ "/" + year);
+//        try {
+//            String day = val.substring(4,6);
+//            String year = val.substring(7,11);
+//            String month = getMonthNumber(val.substring(0,3));
+//            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+//            formatter.setLenient(false);
+//            Date date = formatter.parse(day + "/" + month+ "/" + year);
+//            return true;
+//        }
+////        catch (ParseException e) {
+////            return false;
+////        }
+////        catch (ExceptionInInitializerError e) {
+////            return false;
+////        }
+//        catch (Exception e) {
 //            return false;
 //        }
-//        catch (ExceptionInInitializerError e) {
-//            return false;
-//        }
-        catch (Exception e) {
-            return false;
-        }
-    }
+//    }
     private static String getMonthNumber(String input) {
         //utils.print(input);
         switch (input) {
@@ -101,6 +105,25 @@ public class PropertiesLoader {
             case "Oct": return "10";
             case "Nov": return "11";
             case "Dec": return "12";
+        }
+        return "empty";
+    }
+
+    public static String getMonthName(String input) {
+        //utils.print(input);
+        switch (input) {
+            case "01": return "Jan";
+            case "02": return "Feb";
+            case "03": return "Mar";
+            case "04": return "Apr";
+            case "05": return "May";
+            case "06": return "Jun";
+            case "07": return "Jul";
+            case "08": return "Aug";
+            case "09": return "Sep";
+            case "10": return "Oct";
+            case "11": return "Nov";
+            case "12": return "Dec";
         }
         return "empty";
     }
