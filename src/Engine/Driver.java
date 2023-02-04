@@ -10,6 +10,8 @@ public class Driver {
         // @TODO Grab recent price list
         // The idea is to use the price list from previous time program was run.
         String[] caseNames = calc.getCaseNames();
+
+
         prices.fetch(caseNames);
 
         // @TODO Update price list

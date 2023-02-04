@@ -22,7 +22,7 @@ public class Calculator {
         }
 
         // get and validate the price
-        double price = prices.getPrice(caseName, Config.DEFAULT_DATE);
+        double price = prices.getPrice(caseName);
         if (!prices.isValid(price)){
             return CONSTANTS.PRICE_ERROR;
         }

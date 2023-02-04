@@ -31,17 +31,17 @@ public class Prices {
         prop.setProperty(caseName, doubleToString(price));
     }
 
-    //    public double getPrice(String caseName) {
-//        try {
-//            String priceString = prop.getProperty(caseName);
-//            return Double.valueOf(priceString);
-//        }
-//        catch (Exception e) {
-//            // override case price to error code
-//            return CONSTANTS.PRICE_ERROR;
-//        }
-//
-//    }
+        public double getPrice(String caseName) {
+        try {
+            String priceString = prop.getProperty(caseName);
+            return Double.valueOf(priceString);
+        }
+        catch (Exception e) {
+            // override case price to error code
+            return CONSTANTS.PRICE_ERROR;
+        }
+
+    }
     private static String doubleToString(double price) {
         return String.valueOf(price);
     }
@@ -64,7 +64,7 @@ public class Prices {
 
         for (caseNumber = 0; caseNumber < caseNames.length; caseNumber++) {
             // iterate through for each case that our user holds at least one of
-            double price = getPrice(caseNames[caseNumber], Config.DEFAULT_DATE);
+            double price = findPrice(caseNames[caseNumber], Config.DEFAULT_DATE);
             if (ErrorHandler.validateError(price)) {
                 setPrice(caseNames[caseNumber], price);
                 utils.print("Price found for " + caseNames[caseNumber].toString().toLowerCase() + " case: $" + price);
@@ -77,7 +77,7 @@ public class Prices {
 
     }
 
-    public static double getPrice(String caseName, Date date) {
+    public static double findPrice(String caseName, Date date) {
         //Date date = Config.DEFAULT_DATE;
         String url = CaseURL.valueOf(caseName).getURL();
         utils.print("URL was found to be: " + url);

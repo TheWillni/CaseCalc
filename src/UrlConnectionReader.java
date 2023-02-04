@@ -13,7 +13,7 @@ public class UrlConnectionReader
         //System.out.println(output);
         String priceHistory = output.substring(start,end);
         //System.out.println(priceHistory);
-        return output;
+        return priceHistory;
     }
 
     private static String getUrlContents(String theUrl)
