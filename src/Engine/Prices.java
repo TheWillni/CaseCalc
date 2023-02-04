@@ -120,7 +120,7 @@ public class Prices {
             casePrice = CONSTANTS.PRICE_ERROR;
         } else {
             casePrice = Double.valueOf(massData.substring(start + 1, end));
-            //utils.print("CasePrice was found to be: $" + casePrice);
+            utils.print("Price for " + caseName + " was found to be: $" + casePrice);
         }
         return casePrice;
     }
