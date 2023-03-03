@@ -28,7 +28,9 @@ public class Calculator {
         }
 
         // calculate total value for this particular case.
-        double value = price*quantity;
+        double conversionRate = Constants.CONVERSION_RATE;
+        double value = price*quantity*conversionRate;
+
         utils.print("Total value for " + caseName +" was $" + utils.toTwoDeci(value));
         return value;
     }

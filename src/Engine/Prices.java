@@ -67,7 +67,7 @@ public class Prices {
             double price = findPrice(caseNames[caseNumber], Config.DEFAULT_DATE);
             if (ErrorHandler.validateError(price)) {
                 setPrice(caseNames[caseNumber], price);
-                utils.print("Price found for " + caseNames[caseNumber].toString().toLowerCase() + " case: $" + price);
+                //utils.print("Price found for " + caseNames[caseNumber].toString().toLowerCase() + " case: $" + price);
             } else {
                 setPrice(caseNames[caseNumber], CONSTANTS.PRICE_ERROR);
             }
@@ -120,7 +120,8 @@ public class Prices {
             casePrice = CONSTANTS.PRICE_ERROR;
         } else {
             casePrice = Double.valueOf(massData.substring(start + 1, end));
-            utils.print("Price for " + caseName + " was found to be: $" + casePrice);
+            //casePrice = casePrice * Constants.CONVERSION_RATE;
+            utils.print("Price for " + caseName + " was found to be: $" + utils.toTwoDeci(casePrice* Constants.CONVERSION_RATE));
         }
         return casePrice;
     }
