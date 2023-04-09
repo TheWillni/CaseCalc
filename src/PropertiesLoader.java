@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Permission;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,18 +9,18 @@ import java.util.Date;
 import java.util.Properties;
 
 public class PropertiesLoader {
-    private static MyUtils utils = new MyUtils();
-    PropertiesLoader () {
-        setProperties("general.properties");
+    private MyUtils utils;
+    PropertiesLoader (MyUtils util) {
+        utils = util;
     }
-    public static void setProperties(String propertiesFile) {
+    public void setConfig(String propertiesFile, Config config) {
         final Properties properties = loadPropertiesFile(propertiesFile);
         // default date
         Date def = new Date();
         def.getTime();
-        Config.DATE = safeGetDate(properties, "chosenDate", def);
-        Config.POS_VAR = safeGetVariance(properties, "positiveVariance", 1);
-        Config.NEG_VAR = safeGetVariance(properties, "negativeVariance", 1);
+        config.DATE = safeGetDate(properties, "chosenDate", def);
+        config.POS_VAR = safeGetVariance(properties, "positiveVariance", 1);
+        config.NEG_VAR = safeGetVariance(properties, "negativeVariance", 1);
     }
 
 
@@ -54,7 +55,7 @@ public class PropertiesLoader {
         }
     }
 
-    private static Integer safeGetVariance(Properties properties, String key, int def) {
+    private Integer safeGetVariance(Properties properties, String key, int def) {
         if (properties == null) {
             return def;
         }

@@ -2,34 +2,35 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class Prices {
-    public static Properties prop = new Properties();
-    public static Constants CONSTANTS = new Constants();
+    private static Properties priceInfo;
 
-    public static MyUtils utils = new MyUtils();
-    public static UrlConnectionReader WebGrabber = new UrlConnectionReader();
+    private static MyUtils utils;
+    private static UrlConnectionReader WebGrabber = new UrlConnectionReader();
+    private static Config cfg;
+    private Constants constants = new Constants();
 
     // we store all our data for our current cases in a map, where our case name links to its price at current date
-    public Map<String, CaseInfo> casesInfo = new HashMap<String, CaseInfo>();
 
-    public Prices() {
-
+    public Prices(MyUtils util, Config config) {
+        //prop = new Properties()
+        // @todo remove this
+        utils = util;
+        cfg = config;
+        priceInfo = new Properties();
     }
 
     public static void setPrice(String caseName, double price) {
-        prop.setProperty(caseName, doubleToString(price));
-    }
-    public void updateCaseInfo(String caseName, CaseInfo caseInfo){
-        casesInfo.put(caseName, caseInfo);
+        priceInfo.setProperty(caseName, doubleToString(price));
     }
 
     public double getPrice(String caseName) {
         try {
-            String priceString = prop.getProperty(caseName);
+            String priceString = priceInfo.getProperty(caseName);
             return Double.valueOf(priceString);
         }
         catch (Exception e) {
             // override case price to error code
-            return CONSTANTS.PRICE_ERROR;
+            return constants.PRICE_ERROR;
         }
 
     }
@@ -45,22 +46,19 @@ public class Prices {
         return true;
     }
 
-    public void fetch(String[] caseNames) {
+    public void fetch(String[] caseNames, Config cfg) {
         int caseNumber = 0;
         //String dateString = DateHandler.format(Config.DEFAULT_DATE);
 
         for (caseNumber = 0; caseNumber < caseNames.length; caseNumber++) {
-            CaseInfo newInfo = new CaseInfo();
             String caseName = caseNames[caseNumber];
             // iterate through for each case that our user holds at least one of
-            double price = findPrice(caseName, Config.DATE);
+            double price = findPrice(caseName, cfg.DATE);
             if (ErrorHandler.validateError(price)) {
                 setPrice(caseNames[caseNumber], price);
-                casesInfo.get(caseName).setPrice(price);
                 //utils.print("Price found for " + caseNames[caseNumber].toString().toLowerCase() + " case: $" + price);
             } else {
-                setPrice(caseNames[caseNumber], CONSTANTS.PRICE_ERROR);
-                casesInfo.get(caseName).setPrice(price);
+                setPrice(caseNames[caseNumber], constants.PRICE_ERROR);
             }
 
         }
@@ -74,22 +72,22 @@ public class Prices {
         // loop until we find a match
         int info = getInfoLocation(caseName, massData, date);
 
-        if (info == CONSTANTS.NOT_FOUND) {
-            return CONSTANTS.PRICE_ERROR;
+        if (info == constants.NOT_FOUND) {
+            return constants.PRICE_ERROR;
         }
 
         massData = massData.substring(info);
-        int start = CONSTANTS.NOT_FOUND;
-        int end = CONSTANTS.NOT_FOUND;
+        int start = constants.NOT_FOUND;
+        int end = constants.NOT_FOUND;
         int i = 0;
         // we have now isolated a string in this format --> ["Feb 03 2023 03: +0",46.269,"9"]
         // but now we need to only grab the double thats surround by the 2 ","'s
         double casePrice = -1.0;
-        for (i = 0; i < CONSTANTS.MAXIMUM_STEAM_DATA_RANGE; i++) {
+        for (i = 0; i < constants.MAXIMUM_STEAM_DATA_RANGE; i++) {
             //utils.print("Char at [" + i + "]: " + massData.charAt(i));
             if (massData.charAt(i) == ',') {
                 // this is the index of the first comma
-                if (start == CONSTANTS.NOT_FOUND) {
+                if (start == constants.NOT_FOUND) {
                     start = i;
                 } else {
                     // this is the index of the second comma
@@ -102,7 +100,7 @@ public class Prices {
         // Validate that we did infact find both start and end comma's
         if (start == -1 || end == -1) {
             utils.print("\n\n\n\nITS FUCKED LOL\n\n\n\n\n");
-            casePrice = CONSTANTS.PRICE_ERROR;
+            casePrice = constants.PRICE_ERROR;
         } else {
             casePrice = Double.valueOf(massData.substring(start + 1, end));
             //casePrice = casePrice * Constants.CONVERSION_RATE;
@@ -117,7 +115,7 @@ public class Prices {
         int negCount = 0;
         int posVar = Config.POS_VAR;
         int negVar = Config.NEG_VAR;
-        int infoLocation = CONSTANTS.NOT_FOUND;
+        int infoLocation = constants.NOT_FOUND;
         Date forwardDate = date;
         Date backwardDate = date;
         try {
@@ -133,7 +131,7 @@ public class Prices {
 
 
         // @TODO make this check more sophisticated
-        if (infoLocation == CONSTANTS.NOT_FOUND) {
+        if (infoLocation == constants.NOT_FOUND) {
             while (posCount < posVar || negCount < negVar) {
                 if (posCount < posVar) {
                     // if we still have variance to look forward, check next date
@@ -141,10 +139,9 @@ public class Prices {
                     try {
                         forwardDate = DateHandler.getTomorrow(forwardDate);
                         infoLocation = massData.lastIndexOf(DateHandler.format(forwardDate));
-                        if (infoLocation != CONSTANTS.NOT_FOUND) {
+                        if (infoLocation != constants.NOT_FOUND) {
                             utils.print("Price found on date: " + DateHandler.format(forwardDate));
                             // update our stored date for our case to this new date
-                            casesInfo.get(caseName).setDate(forwardDate);
                             return infoLocation;
                         }
                     } catch (Exception ex) {
@@ -157,10 +154,9 @@ public class Prices {
                     try {
                         backwardDate = DateHandler.getYesterday(backwardDate);
                         infoLocation = massData.lastIndexOf(DateHandler.format(backwardDate));
-                        if (infoLocation != CONSTANTS.NOT_FOUND) {
+                        if (infoLocation != constants.NOT_FOUND) {
                             utils.print("Price found on date: " + DateHandler.format(backwardDate));
                             // update our stored date for our case to this new date
-                            casesInfo.get(caseName).setDate(backwardDate);
                             return infoLocation;
                         }
                     } catch (Exception ex2) {

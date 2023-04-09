@@ -3,18 +3,19 @@ import java.util.Map;
 import java.util.Set;
 
 public class Calculator {
-    private static MyUtils utils = new MyUtils();
-
-
+    private MyUtils utils;
     private static Prices prices;
-    private static Inventory inventory;
     private static Constants CONSTANTS = new Constants();
-    private static ErrorHandler errorHandler = new ErrorHandler(CONSTANTS, utils);
-    public Calculator(Prices p, Inventory i) {
-        prices = p;
-        inventory = i;
+    private static ErrorHandler errorHandler;
+    private static Config cfg;
+    public Calculator(MyUtils util, Config config) {
+        // makes our new Price object
+        utils = util;
+        cfg = config;
+        prices =  new Prices(utils, cfg);
+        errorHandler = new ErrorHandler(CONSTANTS, utils);
     }
-    public static double sumCaseValue(String caseName){
+    public double sumCaseValue(String caseName, Inventory inventory){
 
         // get and validate quantity
         int quantity = inventory.getQuantity(caseName);
@@ -36,16 +37,14 @@ public class Calculator {
         return value;
     }
 
-    public static double sumInventoryValue() {
+    public double sumInventoryValue(Inventory inventory) {
         double totalSum = 0.0;
         utils.print("Attempting to calculate total inventory value...");
-        String[] casesNames = getCaseNames();
-        Map<String, CaseInfo> casesInfo = prices.casesInfo;
+        String[] casesNames = getCaseNames(inventory);
+        prices.fetch(casesNames, cfg);
         // reading from array
         for (String caseName : casesNames) {
-            CaseInfo caseInfo = casesInfo.get(caseName);
-            caseInfo.preview();
-            double caseValue = sumCaseValue(caseName);
+            double caseValue = sumCaseValue(caseName, inventory);
             if (errorHandler.validateError(caseValue)) {
                 totalSum += caseValue;
                 //@todo currency converter
@@ -58,7 +57,7 @@ public class Calculator {
         return totalSum;
     }
 
-    public static String[] getCaseNames() {
+    public static String[] getCaseNames(Inventory inventory) {
 
         // reading keyset into an array
         Set<Object> casesSet = inventory.getKeySet();

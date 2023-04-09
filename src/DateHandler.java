@@ -15,12 +15,7 @@ public class DateHandler {
         return dateString;
     }
     public static String format(Date date) {
-        String info = date.toString();
-        //System.out.println(date.toString());;
-//        String month = info.substring(4,8);
-//        String day = info.substring(8,11);
-//        String year ;
-//        String year = info.substring(25,29);
+        //String info = date.toString();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         String year = String.valueOf(cal.get(Calendar.YEAR));

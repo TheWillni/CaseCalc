@@ -34,9 +34,5 @@ public class MyUtils {
         return false;
     }
 
-    public static void makeBreakDown(Map<String, CaseInfo> casesInfo) {
-        System.out.println("Printing breakdown");
-        Set caseNames = casesInfo.keySet();
-        // @todo more
-    }
+
 }
