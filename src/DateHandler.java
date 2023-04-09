@@ -48,4 +48,21 @@ public class DateHandler {
         //utils.print("Formatted: " + formatted);
         return formatted;
     }
+    public static Date getTomorrow(Date date) {
+        Date newDate;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, 1);
+        newDate = cal.getTime();
+        return newDate;
+    }
+
+    public static Date getYesterday(Date date) {
+        Date newDate;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, -1);
+        newDate = cal.getTime();
+        return newDate;
+    }
 }

@@ -7,4 +7,5 @@ public class Constants {
     int NOT_FOUND = -1;
     // @todo move elsewhere
     static double CONVERSION_RATE = 1.48;
+    static int INFINITY = 50000;
 }

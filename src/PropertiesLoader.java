@@ -17,7 +17,9 @@ public class PropertiesLoader {
         // default date
         Date def = new Date();
         def.getTime();
-        Config.DEFAULT_DATE = safeGetDate(properties, "defaultDate", def);
+        Config.DATE = safeGetDate(properties, "chosenDate", def);
+        Config.POS_VAR = safeGetVariance(properties, "positiveVariance", 1);
+        Config.NEG_VAR = safeGetVariance(properties, "negativeVariance", 1);
     }
 
 
@@ -38,15 +40,33 @@ public class PropertiesLoader {
     }
 
     private static Integer safeGetInt(Properties properties, String key, int def) {
-        if(properties == null) {
+        if (properties == null) {
             return def;
         }
         String val = properties.getProperty(key);
         try {
-            if(val != null) {
+            if (val != null) {
                 return Integer.parseInt(val);
             } else return def;
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
+            System.err.println("Error deserializing: " + val);
+            return def;
+        }
+    }
+
+    private static Integer safeGetVariance(Properties properties, String key, int def) {
+        if (properties == null) {
+            return def;
+        }
+        String val = properties.getProperty(key);
+        try {
+            if (val != null) {
+                if (utils.isInfinity(val)) {
+                    return Constants.INFINITY;
+                }
+                return Integer.parseInt(val);
+            } else return def;
+        } catch (NumberFormatException e) {
             System.err.println("Error deserializing: " + val);
             return def;
         }

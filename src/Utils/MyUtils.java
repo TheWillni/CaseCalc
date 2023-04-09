@@ -17,4 +17,17 @@ public class MyUtils {
     public static String toTwoDeci(double number) {
         return String.format("%.2f", number);
     }
+    public static Boolean isInfinity(String val) {
+        String varianceText = val.toUpperCase();
+        if (varianceText.compareTo("*") == 0) {
+            return true;
+        }
+        if (varianceText.compareTo("INFINITY") == 0) {
+            return true;
+        }
+        if (varianceText.compareTo("INFINITE") == 0) {
+            return true;
+        }
+        return false;
+    }
 }
