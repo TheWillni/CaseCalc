@@ -12,7 +12,7 @@ public class Inventory {
         setQuantity("FRACTURE", 3299);
         setQuantity("CHROMA_3", 340);
         setQuantity("BRAVO", 1);
-        setQuantity("DREAMS_NIGHTMARES", -1);
+        setQuantity("DREAMS_NIGHTMARES", 1);
         setQuantity("BREAKOUT", 3);
         setQuantity("BROKEN_FANG", 15);
 

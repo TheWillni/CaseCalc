@@ -1,7 +1,4 @@
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Prices {
@@ -11,27 +8,21 @@ public class Prices {
     public static MyUtils utils = new MyUtils();
     public static UrlConnectionReader WebGrabber = new UrlConnectionReader();
 
+    // we store all our data for our current cases in a map, where our case name links to its price at current date
+    public Map<String, CaseInfo> casesInfo = new HashMap<String, CaseInfo>();
+
     public Prices() {
-        //Properties prop = new Properties();
 
-        // @TODO remove these manual prices. Implement loading and saving.
-//        setPrice("PHOENIX", 2.88);
-//        setPrice("FRACTURE", 0.27);
-//        setPrice("CHROMA 3", 1.20);
-//        setPrice("BRAVO", 65.66);
-//        setPrice("DREAMS AND NIGHTMARES", -1.06);
-//        setPrice("BREAKOUT", 6.32);
-//        setPrice("BROKEN FANG", 3.02);
-
-
-        //fetch();
     }
 
     public static void setPrice(String caseName, double price) {
         prop.setProperty(caseName, doubleToString(price));
     }
+    public void updateCaseInfo(String caseName, CaseInfo caseInfo){
+        casesInfo.put(caseName, caseInfo);
+    }
 
-        public double getPrice(String caseName) {
+    public double getPrice(String caseName) {
         try {
             String priceString = prop.getProperty(caseName);
             return Double.valueOf(priceString);
@@ -54,30 +45,34 @@ public class Prices {
         return true;
     }
 
-    public static void fetch(String[] caseNames) {
+    public void fetch(String[] caseNames) {
         int caseNumber = 0;
         //String dateString = DateHandler.format(Config.DEFAULT_DATE);
 
         for (caseNumber = 0; caseNumber < caseNames.length; caseNumber++) {
+            CaseInfo newInfo = new CaseInfo();
+            String caseName = caseNames[caseNumber];
             // iterate through for each case that our user holds at least one of
-            double price = findPrice(caseNames[caseNumber], Config.DATE);
+            double price = findPrice(caseName, Config.DATE);
             if (ErrorHandler.validateError(price)) {
                 setPrice(caseNames[caseNumber], price);
+                casesInfo.get(caseName).setPrice(price);
                 //utils.print("Price found for " + caseNames[caseNumber].toString().toLowerCase() + " case: $" + price);
             } else {
                 setPrice(caseNames[caseNumber], CONSTANTS.PRICE_ERROR);
+                casesInfo.get(caseName).setPrice(price);
             }
 
         }
     }
 
-    public static double findPrice(String caseName, Date date) {
+    public double findPrice(String caseName, Date date) {
         String url = CaseURL.valueOf(caseName).getURL();
         utils.print("URL was found to be: " + url);
         String massData = WebGrabber.grabFromUrl(url);
 
         // loop until we find a match
-        int info = getInfoLocation(massData, date);
+        int info = getInfoLocation(caseName, massData, date);
 
         if (info == CONSTANTS.NOT_FOUND) {
             return CONSTANTS.PRICE_ERROR;
@@ -117,7 +112,7 @@ public class Prices {
     }
 
 
-    private static int getInfoLocation(String massData, Date date) {
+    private int getInfoLocation(String caseName, String massData, Date date) {
         int posCount = 0;
         int negCount = 0;
         int posVar = Config.POS_VAR;
@@ -148,6 +143,8 @@ public class Prices {
                         infoLocation = massData.lastIndexOf(DateHandler.format(forwardDate));
                         if (infoLocation != CONSTANTS.NOT_FOUND) {
                             utils.print("Price found on date: " + DateHandler.format(forwardDate));
+                            // update our stored date for our case to this new date
+                            casesInfo.get(caseName).setDate(forwardDate);
                             return infoLocation;
                         }
                     } catch (Exception ex) {
@@ -162,6 +159,8 @@ public class Prices {
                         infoLocation = massData.lastIndexOf(DateHandler.format(backwardDate));
                         if (infoLocation != CONSTANTS.NOT_FOUND) {
                             utils.print("Price found on date: " + DateHandler.format(backwardDate));
+                            // update our stored date for our case to this new date
+                            casesInfo.get(caseName).setDate(backwardDate);
                             return infoLocation;
                         }
                     } catch (Exception ex2) {
@@ -170,7 +169,7 @@ public class Prices {
                 }
             }
         }
-        utils.print("Price found on date: " + DateHandler.format(date));
+        utils.print("1Price found on date: " + DateHandler.format(date));
         return infoLocation;
 //        if (infoLocation == CONSTANTS.NOT_FOUND) {
 //            return CONSTANTS.PRICE_ERROR;

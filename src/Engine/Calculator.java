@@ -1,4 +1,5 @@
 import java.text.DecimalFormat;
+import java.util.Map;
 import java.util.Set;
 
 public class Calculator {
@@ -39,8 +40,11 @@ public class Calculator {
         double totalSum = 0.0;
         utils.print("Attempting to calculate total inventory value...");
         String[] casesNames = getCaseNames();
+        Map<String, CaseInfo> casesInfo = prices.casesInfo;
         // reading from array
         for (String caseName : casesNames) {
+            CaseInfo caseInfo = casesInfo.get(caseName);
+            caseInfo.preview();
             double caseValue = sumCaseValue(caseName);
             if (errorHandler.validateError(caseValue)) {
                 totalSum += caseValue;

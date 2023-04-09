@@ -1,3 +1,6 @@
+import java.util.Map;
+import java.util.Set;
+
 public class MyUtils {
     private final boolean PRINT_NEWLINE = true;
     public void print(Object object) {
@@ -29,5 +32,11 @@ public class MyUtils {
             return true;
         }
         return false;
+    }
+
+    public static void makeBreakDown(Map<String, CaseInfo> casesInfo) {
+        System.out.println("Printing breakdown");
+        Set caseNames = casesInfo.keySet();
+        // @todo more
     }
 }
